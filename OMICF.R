@@ -1,6 +1,5 @@
 library(minerva)
 
-
 MIC=function(fearray,classflag,expfeanum=F){
   
   index=colSums(is.na(fearray))==0
@@ -17,7 +16,6 @@ MIC=function(fearray,classflag,expfeanum=F){
     MICValue[i]<-mine(as.numeric(fearray[,i]),as.numeric(Y[,1]))$MIC 
   }
   
-  
   #sort
   index=1:incol
   mic<-rbind(index,MICValue)
@@ -26,85 +24,41 @@ MIC=function(fearray,classflag,expfeanum=F){
     mic=mic[,1:expfeanum]
   }
   return(mic)
-  
 }
 
 
-
-OMICFS=function(fearray,classflag,psfeanum,expfeanum){
-  
-  if (psfeanum<expfeanum){
-    return(-1)
-  }
-  #max relevent featurs
-  MaxRel= MIC(fearray,classflag,psfeanum)
-  
-  #suprimer les element null
+OMICFS<-function(X,Y,d){
+  MaxRel=MIC(X,Y)
+  #supriment les element null
   index=which(MaxRel[2,]==0)
   if(length(index)>0){ MaxRel=MaxRel[,-index] }
   
   #initialisation
-  len=ncol(MaxRel)
-  candfeaflag=rep(1,len-1)
-  actexpfeanum=min(expfeanum,len)
+  
   RankedFea=MaxRel[1,1]
-  temporthvector=fearray[,RankedFea]
+  MaxRel=MaxRel[,-1]
+  
+  temporthvector=X[,RankedFea]
   orthvecotr=data.frame(temporthvector/norm(temporthvector,"2"))
-  
-  for(i in seq(actexpfeanum-1)){
-    index1=0
-    temporthvector=matrix(nrow = nrow(fearray),ncol=ncol(fearray))
-    for(j in seq(len-1)){
-      if(candfeaflag[j]==1){
-        index1=index1+1
-        temporthvector[,index1]=fearray[,MaxRel[1,j+1]]
-        for(m in 1:i){
-          temporthvector[,index1]=temporthvector[,index1]- c(fearray[,MaxRel[1,j+1]] %*% orthvecotr[,m]/norm(orthvecotr[,m],"2"))
-        }
-        temporthvector[,index1]=temporthvector[,index1]/norm(temporthvector[,index1],"2")
+  i=1
+  while(i < d ){
+    temporthvector=matrix(nrow = nrow(X),ncol=ncol(MaxRel))
+    for (j in seq(ncol(MaxRel))) {
+      temporthvector[,j]=X[,MaxRel[1,j]]
+      for(m in 1:i){
+        temporthvector[,j]=temporthvector[,j]- c(X[,MaxRel[1,j]] %*% orthvecotr[,m]/norm(orthvecotr[,m],"2"))
       }
+      temporthvector[,j]=temporthvector[,j]/norm(temporthvector[,j],"2")
     }
-    #compute max Relevance and min Redundancy
-    MaxRMinR=MIC(temporthvector,classflag,index1) %>% as.data.frame()
-    index2=0
-    tempFSMICnum=tempFSMICscore=c()
-    for(j in seq(len-1)){
-      if(candfeaflag[j]==1){
-        index2=index2+1
-        tempFSMICscore[index2]=MaxRMinR[2,index2]
-        tempFSMICnum[index2]=MaxRel[1,j+1];
-      }
-    }
-    max_index=which.max(tempFSMICscore)
-    orthvecotr[,i+1]=temporthvector[,max_index]
-    RankedFea[i+1]=tempFSMICnum[max_index]
-    candfeaflag[which( MaxRel[1,] ==  tempFSMICnum[max_index]-1) ]=0;
     
+    MaxRMinR=MIC(temporthvector,Y) %>% as.data.frame()
+    
+    max_index=MaxRMinR[1,1]
+    orthvecotr[,i+1]=temporthvector[, max_index]
+    RankedFea[i+1]=MaxRel[1,max_index]
+    MaxRel=MaxRel[,-max_index] %>% as.matrix()
+    if(ncol(MaxRel)==0){break}
+    i=i+1
   }
-  
-  
-  return(RankedFea)  
-  
-  
-}
-
-
-normlize<-function(e){
-  result=(e-mean(e))/sd(e)
-  return(result)
-}
-
-d=rep(0,6)
-V=1:6
-#Vm=c("V1","V2","V3","V4","V5","V6")
-for(i in 1:100){
-  data=toys(100,50)
-  data=sapply(data,normlize) %>% as.data.frame()
-  X=select(data,-Q)
-  Y=select(data,Q)
-  result=OMICFS(X,Y,6,6)
-  print(i)
-  result=result %in% V
-  d[result]=d[result]+1
-  
+   return(RankedFea)
 }
