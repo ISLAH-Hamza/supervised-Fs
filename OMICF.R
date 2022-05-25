@@ -13,7 +13,7 @@ MIC=function(fearray,classflag,expfeanum=F){
   MICValue=c()
   fearray=round(fearray*10^4)/10^4
   for(i in seq(incol)){
-    MICValue[i]<-mine(as.numeric(fearray[,i]),as.numeric(Y[,1]))$MIC 
+    MICValue[i]<-mine(as.numeric(fearray[,i]),as.numeric(classflag[,1]))$MIC 
   }
   
   #sort
