@@ -1,22 +1,22 @@
-library(infotheo)
-library(dplyr)
-
 MRMR<-function(Featurs,target,k){
   
-  # discritisation des entree
-  Featursbins=nrow(unique(round(Featurs*10)))
-  Featurs=discretize( Featurs , nbins=Featursbins )
-  targetbins=nrow(unique(round(target*10)))
-  target=discretize( target,nbins=targetbins)
+  # The notations used
+  # Featurs : Independent variables. !! Must not contain target variables
+  # target : The variables to predict 
+  # k : The number of variables to select
+  # S : returned subset of selected features
+  # I : The Mutual Information Matrix
+
   
+  #initialization
   p=ncol(Featurs)
   I=matrix(nrow = 2,ncol=p)
   S=c()
 
-  if(k>p){ return(-1) }   # le nombre de featur selection doit étre inferieur des nbr de featurs
+  if(k>p){ return(-1) }  
   if(k==p){return(seq(1:p))}
   for(i in 1:p){
-    I[2,i]=mutinformation(Featurs[i],target)
+    I[2,i]=infotheo::mutinformation(Featurs[i],target)
     I[1,i]=i
   } 
   
@@ -29,7 +29,7 @@ MRMR<-function(Featurs,target,k){
      R=c()  
      for(i in 1:ncol(I)){
        s=0
-       for(j in S){ s=s+mutinformation(Featurs[j],Featurs[ I[1,i] ]) } 
+       for(j in S){ s=s+infotheo::mutinformation(Featurs[j],Featurs[ I[1,i] ]) } 
        R[i]=I[2,i]-s/length(S)
      }
      index=which.max(R)
@@ -40,17 +40,3 @@ MRMR<-function(Featurs,target,k){
   
   return(S)
 }
-
-
-d=rep(0,6)
-V=1:6
-for(i in 1:100){
-  
-  data=toys(100,500)
-  X=select(data,-Q)
-  Y=select(data,Q)
-  r=V %in% MRMR(X,Y,6)
-  d[r]=d[r]+1
-  print(i)
-}
-
