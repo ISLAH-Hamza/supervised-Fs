@@ -1,4 +1,3 @@
-library(minerva)
 
 MIC=function(fearray,classflag,expfeanum=F){
   
@@ -13,7 +12,7 @@ MIC=function(fearray,classflag,expfeanum=F){
   MICValue=c()
   fearray=round(fearray*10^4)/10^4
   for(i in seq(incol)){
-    MICValue[i]<-mine(as.numeric(fearray[,i]),as.numeric(classflag[,1]))$MIC 
+    MICValue[i]<-minerva::mine(as.numeric(fearray[,i]),as.numeric(classflag[,1]))$MIC 
   }
   
   #sort
@@ -25,6 +24,7 @@ MIC=function(fearray,classflag,expfeanum=F){
   }
   return(mic)
 }
+
 
 
 OMICFS<-function(X,Y,d){
@@ -39,16 +39,17 @@ OMICFS<-function(X,Y,d){
   MaxRel=MaxRel[,-1]
   
   temporthvector=X[,RankedFea]
-  orthvecotr=data.frame(temporthvector/norm(temporthvector,"2"))
+  orthvecotr=data.frame(temporthvector/base::norm(temporthvector,type="2"))
   i=1
+  
   while(i < d ){
     temporthvector=matrix(nrow = nrow(X),ncol=ncol(MaxRel))
     for (j in seq(ncol(MaxRel))) {
       temporthvector[,j]=X[,MaxRel[1,j]]
       for(m in 1:i){
-        temporthvector[,j]=temporthvector[,j]- c(X[,MaxRel[1,j]] %*% orthvecotr[,m]/norm(orthvecotr[,m],"2"))
+        temporthvector[,j]=temporthvector[,j]- c(X[,MaxRel[1,j]] %*% orthvecotr[,m]/base::norm(orthvecotr[,m],type = "2"))
       }
-      temporthvector[,j]=temporthvector[,j]/norm(temporthvector[,j],"2")
+      temporthvector[,j]=temporthvector[,j]/base::norm(temporthvector[,j],type="2")
     }
     
     MaxRMinR=MIC(temporthvector,Y) %>% as.data.frame()
@@ -60,5 +61,6 @@ OMICFS<-function(X,Y,d){
     if(ncol(MaxRel)==0){break}
     i=i+1
   }
-   return(RankedFea)
+  
+  return(RankedFea)
 }
