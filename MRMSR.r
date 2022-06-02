@@ -1,16 +1,18 @@
+
 MRMSR=function(Featurs,target,K){
 
-  #
-  #
-  #
-  #
-  #  
+  # Featurs 
+  # target
+  # K
+  # I
+  # H 
+  # J
   
   # handling inputs
   p=ncol(Featurs)
   if(K>p){return("number of selecting featurs must be less than number of featurs")}
  
-  J=R=c()
+  R=c()
   H=infotheo::entropy(target)
   for(i in 1:p ){
     I=infotheo::mutinformation( Featurs[i],target)
@@ -24,8 +26,9 @@ MRMSR=function(Featurs,target,K){
   m=1
   
   while(m < K){
+    J=c()
     t=0
-    for(i in seq(length(Featurs))){
+    for(i in seq(ncol(Featurs))){
       Il=infotheo::condinformation(Fl, target,Featurs[i])
       Ii=infotheo::condinformation(Featurs[i], target,Fl)
       S=1-((Il+Ii)/2*H)
@@ -43,8 +46,4 @@ MRMSR=function(Featurs,target,K){
   return(Featurs_OUT)
   
 }
-
-
-
-
 
