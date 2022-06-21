@@ -1,4 +1,3 @@
-
 MRMR<-function(Featurs,target,k){
   # The notations used
   # Featurs : Independent variables. !! Must not contain target variables
@@ -6,12 +5,12 @@ MRMR<-function(Featurs,target,k){
   # k : The number of variables to select
   # S : returned subset of selected features
   # I : The Mutual Information Matrix 
-
+  p=ncol(Featurs)
+  
   if(k>p){ return(-1) }  
   if(k==p){return(seq(1:p))}
   
   #initialization
-  p=ncol(Featurs)
   I=matrix(nrow = 2,ncol=p)
   S=rep(NA,k)
   m=1
