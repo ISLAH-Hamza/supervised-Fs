@@ -24,7 +24,6 @@ KIFall <- function(Sample, y, threshold){
   y <- as.factor(unlist(y))
   p <- ncol(Sample) ## number of predictors
   
-  
   ## needed to parallelize the code
   IndexSuite <<- list()
   i <- 1
@@ -44,4 +43,7 @@ KIFall <- function(Sample, y, threshold){
   vecBeindex=t(vecBeindex)
   vecBeindex= vecBeindex[ order(vecBeindex[,3],decreasing=T),]
   return(vecBeindex[seq(threshold), c(1,2)] )
+
 }
+
+
