@@ -1,3 +1,5 @@
+library(igraph)
+library(dplyr)
 
 GBS<-function(Features,C){
   ##########  Initialisation #########

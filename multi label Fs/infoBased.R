@@ -50,7 +50,11 @@ FMFS=function(X,Y,n,q,b=2){
 }
 
 
-dataT=MultiData(20,20)
+
+test=c(1,2,3,4,5,11,13,14,15)
+d2=d1=rep(0,9)
+for(i in 1: 100 ){
+dataT=MultiData(100,200)
 X=select(dataT, 1:20 )
 X=round(X*100)/100 
 X=infotheo::discretize(X)
@@ -58,10 +62,17 @@ Y=select(dataT,21:24) %>% infotheo::discretize()
 Y=cbind(Y,2*Y)
 q=2
 
-FMFS(X,Y,15,2,b=2)
-FMFS(X,Y,15,2,b=1)
+R2=FMFS(X,Y,9,2,b=2)
+R1=FMFS(X,Y,9,2,b=1)
 
+d1=d1+as.numeric(R1 %in% test)
+d2=d2+as.numeric(R2 %in% test)
+print(d1)
+}
 
-
+SS=c()
+for(i in 1:9){
+  SS=SS=cat("(V", test[i], ",", d2[i],")",sep="")
+}
 
 
