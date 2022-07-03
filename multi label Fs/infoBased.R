@@ -3,8 +3,8 @@
 FMFS=function(X,Y,n,q,b=2){
   
   
-  if(ncol(Y)<2){stop("b should be greater than 2")}
-  if(b!=1 && b!= 2){ stop("*****")}
+  if(ncol(Y)<2){stop("number of labels should be greater than 2")}
+  if(b!=1 && b!= 2){ stop("b is invalid")}
   # X : predictive variables
   # Y : target variable
   # n : number of featurs to be selected

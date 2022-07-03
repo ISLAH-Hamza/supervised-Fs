@@ -17,14 +17,14 @@ KIF <- function(X,y){
 }
 
 
-#  !!! Sample should'nt contain y vairables 
-## y must be categorical
+#  !!! Sample should'nt contain Y vairables 
+## Y must be categorical
 
 KIFall <- function(Sample, y, threshold){
   y <- as.factor(unlist(y))
   p <- ncol(Sample) ## number of predictors
   
-  ## needed to parallelize the code
+  # create the pairs of index 
   IndexSuite <<- list()
   i <- 1
   j <- 2
@@ -38,7 +38,7 @@ KIFall <- function(Sample, y, threshold){
       }
   }
   
-  ## Compute the scores and save them
+  ## Compute the KIF scores 
   vecBeindex <- sapply( IndexSuite, function(x){ c(x,KIF(Sample[,x],y) ) })
   vecBeindex=t(vecBeindex)
   vecBeindex= vecBeindex[ order(vecBeindex[,3],decreasing=T),]
