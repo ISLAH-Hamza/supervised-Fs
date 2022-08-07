@@ -47,7 +47,9 @@ the number of occurrences in this case for n=100 and p=50 is:
 print(result)
 100 100 100  97  75  42
 ```
-we repeat the same process to oder méthodes of selection 
+we repeat the same process for the other selection methods, then we draw the bar chart to visualize the results
+
+![alt text](https://github.com/ISLAH-Hamza/supervised-Fs/blob/main/imges/toys_tst.png)
 
 #### 2-Real data test
 the data we are going to use are represented in the following table:
@@ -60,6 +62,8 @@ the data we are going to use are represented in the following table:
 | Divorce | UCI|  170 |  55 |2|
 
 We will apply the selection method on the different data then train the SVM NB and Random Forest classifiers and calculate the accuracy using cross validation.
+
+
 
 the following code deals with the case of diabteic data as an example. we must all first import the data and balance it
 ```r
@@ -113,27 +117,8 @@ for(i in 1:ncol(X)){
 colnames(ModelResult)=c("svm","nb","rf")
 rownames(ModelResult)<-seq(1:nrow(ModelResult))
 ```
-The results obtained are shown in the following table 
+The results obtained are shown in the following graphs 
 
-|i  |  svm |       nb   |     rf |
-|-- |  --- |       ---   |    --- |
-|1  |0.5794379 | 0.5937358 |0.6104918|
-|2  |0.6169865 |0.6399532 |0.6375117|
-|3  |0.6227869 |0.6129475 |0.6297156|
-|4  |0.6358381 |0.6338006 |0.6333980|
-|5  |0.6350519 |0.6231874 |0.6642715|
-|6  |0.6465139 |0.6317397 |0.6679264|
-|7  |0.6333657 |0.6370826 |0.6613355|
-|8  |0.6382636 |0.6313533 |0.6601964|
-|9  |0.6416100 |0.6375343 |0.6489181|
-|10 |0.6652794 |0.6358598 |0.6732649|
-|11 |0.6694855 |0.6387136 |0.6854393|
-|12 |0.6808866 |0.6284460 |0.6892023|
-|13 |0.6751455 |0.6280688 |0.6835499|
-|14 |0.6849749 |0.6330311 |0.6785818|
-|15 |0.6824925 |0.6251957 |0.6883794|
-|16 |0.6824891 |0.6300836 |0.7148223|
-|17 |0.6759351 |0.6243995 |0.7037681|
-|18 |0.6849281 |0.6240097 |0.7010897|
-|19 |0.6766945 |0.6215189 |0.7075858|
-|20 |0.6816074 |0.6264627 |0.6995627|
+![alt text](https://github.com/ISLAH-Hamza/supervised-Fs/blob/main/imges/real_data_tst.png)
+
+***!! for more details see the experimental part in the report***   
